@@ -1,6 +1,6 @@
 defmodule Anansi.Pager do
   @moduledoc """
-  ANSI escape sequences to manipulate the terminal pager.
+  ANSI escape sequences that manipulate the terminal pager.
   """
 
   import Anansi, only: [instruction: 2]

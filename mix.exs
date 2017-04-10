@@ -38,7 +38,7 @@ defmodule Anansi.Mixfile do
   ]
 
   defp package, do: [
-    description: "Drive the tty control through high-level ANSI code sequences.",
+    description: "Command the terminal from a high-level with ANSI control codes.",
     maintainers: [
       "Chris Keele <dev@chriskeele.com>",
     ],

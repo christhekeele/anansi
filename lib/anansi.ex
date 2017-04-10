@@ -1,16 +1,18 @@
 defmodule Anansi do
   @moduledoc """
-  Utilities to work with ANSI escape sequences.
+  Utilities to generate ANSI control code instructions.
 
-  [ANSI escape instructions](https://en.wikipedia.org/wiki/ANSI_escape_code) are
-  strings that can be sent to the terminal to control its screen, pager, and cursor;
-  and manage the formatting, font, and color of the text it displays.
+  [ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code) are
+  strings that can be sent to the terminal to instruct it on how to control its
+  screen, pager, cursor, and the formatting, font, and color of the text it displays.
+
+  When these instructions are written to STDOUT, they affect the way the terminal behaves.
   """
 
-  import Anansi.Sequence, only: [compose: 1, compose: 2]
+  import Anansi.Sequence, only: [compose: 1]
 
   @doc """
-  Detects if ANSI is currently supported (stdin and stdout are ttys).
+  Detects if ANSI is currently supported (STDIN and STDOUT are ttys).
   """
   def enabled? do
     Application.get_env(:elixir, :ansi_enabled, false)
@@ -24,16 +26,9 @@ defmodule Anansi do
   end
 
   @doc """
-  Clears entire screen.
+  Generates an ANSI instruction that applies the given `setting` to `control`.
   """
-  def clear do
-    compose(cursor: [:home, erase: :screen])
-  end
-
-  @doc """
-  Generates an ANSI instruction that applies the given `setting` to control `type`.
-  """
-  def instruction(type, setting)
+  def instruction(control, setting)
 
 ####
 # TEXT RESET
@@ -49,57 +44,37 @@ defmodule Anansi do
 
   def instruction(:bold, :on) do
     escape 1, "m"
-  # after
-  #   instruction :bold, :off
   end
   def instruction(:bold, :off) do
     escape 21, "m"
-  # after
-  #   instruction :bold, :on
   end
 
   def instruction(:faint, :on) do
     escape 2, "m"
-  # after
-  #   instruction :faint, :off
   end
   def instruction(:faint, :off) do
     escape 22, "m"
-  # after
-  #   instruction :faint, :on
   end
 
   def instruction(:italic, :on) do
     escape 3, "m"
-  # after
-  #   instruction :italic, :off
   end
   def instruction(:italic, :off) do
     escape 23, "m"
-  # after
-  #   instruction :italic, :on
   end
 
   def instruction(:underline, :on) do
     escape 4, "m"
-  # after
-  #   instruction :underline, :off
   end
   def instruction(:underline, :off) do
     escape 24, "m"
-  # after
-  #   instruction :underline, :on
   end
 
   def instruction(:blink, :slow) do
     escape 5, "m"
-  # after
-  #   instruction :blink, :off
   end
   def instruction(:blink, :fast) do
     escape 6, "m"
-  # after
-  #   instruction :blink, :off
   end
   def instruction(:blink, :off) do
     escape 25, "m"
@@ -107,35 +82,23 @@ defmodule Anansi do
 
   def instruction(:invert, :on) do
     escape 7, "m"
-  # after
-  #   instruction :invert, :off
   end
   def instruction(:invert, :off) do
     escape 27, "m"
-  # after
-  #   instruction :invert, :on
   end
 
   def instruction(:conceal, :on) do
     escape 8, "m"
-  # after
-  #   instruction :conceal, :off
   end
   def instruction(:conceal, :off) do
     escape 28, "m"
-  # after
-  #   instruction :conceal, :on
   end
 
   def instruction(:strikethrough, :on) do
     escape 9, "m"
-  # after
-  #   instruction :strikethrough, :off
   end
   def instruction(:strikethrough, :off) do
     escape 29, "m"
-  # after
-  #   instruction :strikethrough, :on
   end
 
 ####
@@ -152,56 +115,38 @@ defmodule Anansi do
 
   def instruction(:foreground, :black) do
     escape 30, "m"
-  # after
-  #   instruction :default, :foreground
   end
 
   def instruction(:foreground, :red) do
     escape 31, "m"
-  # after
-  #   instruction :default, :foreground
   end
 
   def instruction(:foreground, :green) do
     escape 32, "m"
-  # after
-  #   instruction :default, :foreground
   end
 
   def instruction(:foreground, :yellow) do
     escape 33, "m"
-  # after
-  #   instruction :default, :foreground
   end
 
   def instruction(:foreground, :blue) do
     escape 34, "m"
-  # after
-  #   instruction :default, :foreground
   end
 
   def instruction(:foreground, :magenta) do
     escape 35, "m"
-  # after
-  #   instruction :default, :foreground
   end
 
   def instruction(:foreground, :cyan) do
     escape 36, "m"
-  # after
-  #   instruction :default, :foreground
   end
 
   def instruction(:foreground, :white) do
     escape 37, "m"
-  # after
-  #   instruction :default, :foreground
   end
 
   def instruction(:foreground, {r, g, b}) when r in 0..255 and g in 0..255 and b in 0..255 do
     escape [38, r, g, b], "m"
-  # after
-  #   instruction :default, :foreground
   end
 
   def instruction(:foreground, num) when num in 0..255 do
@@ -218,56 +163,38 @@ defmodule Anansi do
 
   def instruction(:background, :black) do
     escape 40, "m"
-  # after
-  #   instruction :default, :background
   end
 
   def instruction(:background, :red) do
     escape 41, "m"
-  # after
-  #   instruction :default, :background
   end
 
   def instruction(:background, :green) do
     escape 42, "m"
-  # after
-  #   instruction :default, :background
   end
 
   def instruction(:background, :yellow) do
     escape 43, "m"
-  # after
-  #   instruction :default, :background
   end
 
   def instruction(:background, :blue) do
     escape 44, "m"
-  # after
-  #   instruction :default, :background
   end
 
   def instruction(:background, :magenta) do
     escape 45, "m"
-  # after
-  #   instruction :default, :background
   end
 
   def instruction(:background, :cyan) do
     escape 46, "m"
-  # after
-  #   instruction :default, :background
   end
 
   def instruction(:background, :white) do
     escape 47, "m"
-  # after
-  #   instruction :default, :background
   end
 
   def instruction(:background, {r, g, b}) when r in 0..255 and g in 0..255 and b in 0..255 do
     escape [48, r, g, b], "m"
-  # after
-  #   instruction :default, :background
   end
 
   def instruction(:background, num) when num in 0..255 do
@@ -284,14 +211,10 @@ defmodule Anansi do
 
   def instruction(:pager, {:up, amount}) do
     escape amount, "S"
-  # after
-  #   instruction :scroll, :down, amount
   end
 
   def instruction(:pager, {:down, amount}) do
     escape amount, "T"
-  # after
-  #   instruction :scroll, :down, amount
   end
 
   ####
@@ -342,15 +265,10 @@ defmodule Anansi do
     escape abs(amount), "C"
   end
 
-  def instruction(:cursor, {row, col}) when
-  (
-    (
-      is_integer(row) and row > 0
-    ) or row == nil
+  def instruction(:cursor, {row, col}) when (
+    row == nil or (is_integer(row) and row > 0)
   ) and (
-    (
-      is_integer(col) and col > 0
-    ) or col == nil
+    col == nil or (is_integer(col) and col > 0)
   ) do
     escape [row, col], "H"
   end

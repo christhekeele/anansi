@@ -1,28 +1,20 @@
 defmodule Anansi.Cursor do
   @moduledoc """
-  ANSI escape sequences to manipulate the terminal cursor.
+  ANSI escape sequences that manipulate the terminal cursor.
 
-  ANSI treats the cursor co-ordinates as positive integers of format `{row, col}`.
+  ANSI treats the cursor co-ordinates as positive integers of format `{row in 1..:infinity, col in 1..:infinity}`.
 
   It will ignore requests to move the cursor beyond the bounds of the terminal window.
   """
 
   import Anansi, only: [instruction: 2]
+  import Anansi.Sequence, only: [compose: 1]
 
   @doc """
   Moves cursor to top-left corner of screen (`{1, 1}`).
   """
   def home do
     move :pos, {1, 1}
-  end
-
-  @doc """
-  Asks the terminal to report the current cursor position.
-
-  Terminal will place `"\\e[n;mR"` in stdin where `n` is the row and `m` the column.
-  """
-  def position! do
-    instruction :cursor, :position
   end
 
   @doc """
@@ -170,9 +162,11 @@ defmodule Anansi.Cursor do
   end)
 
   @doc """
-  Move cursor to the first column of `row`.
+  Move cursor to `row` of the current column.
   """
+  def row(row) do
     instruction :cursor, {row, nil}
+  end
 
   @doc """
   Move cursor to `col` of the current row.
@@ -182,9 +176,31 @@ defmodule Anansi.Cursor do
   end
 
   @doc """
+  Asks the terminal to report the current cursor position.
+
+  Terminal will insert `"\\e[n;mR"` into the input device where `n` is the row and `m` the column.
+  """
+  def position do
+    instruction :cursor, :position
+  end
+
+  @doc """
   Move cursor to position `{row, col}.`
   """
-  def pos({row, col}), do: move :pos, {row, col}
+  def position({row, col}), do: move :pos, {row, col}
+
+  # @doc """
+  # Extracts the current cursor position from the terminal.
+  #
+  # Sends the `position/0` instruction, parses the result, and clears the result from the terminal.
+  # """
+  # def position!(device \\ :stdio) do
+  #   IO.write device, compose(cursor: [:save, :position])
+  #   result = IO.read device, :line
+  #   %{"row" => row, "col" => col} = Regex.named_captures(~r/(?<row>\d+);(?<col>\d+)R/, result)
+  #   IO.write device, compose(cursor: :restore, text: [write: String.pad_leading("", String.length(result))], cursor: :restore)
+  #   {String.to_integer(row), String.to_integer(col)}
+  # end
 
   @erasure_things ~w[
     screen
@@ -218,7 +234,7 @@ defmodule Anansi.Cursor do
   @doc """
   Erases `thing` around the cursor in the specified `way`.
 
-  You can erase `:all`, or just erase to `:start` or `:end` of `thing`.
+  You can erase `:all` around the cursor, or just erase to `:start` or `:end` of `thing`.
 
   Supported things: `#{@erasure_things |> Enum.map(&inspect/1) |> Enum.join("`, `")}`.
   """
