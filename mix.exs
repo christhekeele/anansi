@@ -5,7 +5,7 @@ defmodule Anansi.Mixfile do
     name: "Anansi",
     app: :anansi,
 
-    version: "0.0.1",
+    version: "0.0.2",
     elixir: "~> 1.0",
 
     build_embedded: Mix.env == :prod,
@@ -23,8 +23,8 @@ defmodule Anansi.Mixfile do
   ]
 
   def application, do: [
-    extra_applications: [:logger],
-    mod: {Anansi, []},
+    # extra_applications: [:logger],
+    # mod: {Anansi, []},
   ]
 
   defp deps, do: tools()
@@ -71,7 +71,6 @@ defmodule Anansi.Mixfile do
 
   defp dialyzer, do: [
     plt_add_apps: [
-      :mnesia,
       # :ecto,
     ]
   ]

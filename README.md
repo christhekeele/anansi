@@ -1,7 +1,7 @@
 Anansi
 ======
 
-> *Command the terminal from a high-level with ANSI control codes.*
+> ***Command the terminal from a high-level with ANSI control codes.***
 
 Synopsis
 --------
