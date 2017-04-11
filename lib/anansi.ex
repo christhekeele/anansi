@@ -9,7 +9,7 @@ defmodule Anansi do
   When these instructions are written to STDOUT, they affect the way the terminal behaves.
   """
 
-  import Anansi.Sequence, only: [compose: 1]
+  # import Anansi.Sequence, only: [compose: 1]
 
   @doc """
   Detects if ANSI is currently supported (STDIN and STDOUT are ttys).
@@ -240,11 +240,17 @@ defmodule Anansi do
   def instruction(:cursor, {_, 0}) do
     escape 0, "A"
   end
+  def instruction(:cursor, :up) do
+    escape "A"
+  end
   def instruction(:cursor, {:up, amount}) when is_integer(amount) and amount > 0 do
     escape amount, "A"
   end
   def instruction(:cursor, {:up, amount}) when is_integer(amount) and amount < 0 do
     escape abs(amount), "B"
+  end
+  def instruction(:cursor, :down) do
+    escape "B"
   end
   def instruction(:cursor, {:down, amount}) when is_integer(amount) and amount > 0 do
     escape amount, "B"
@@ -252,11 +258,17 @@ defmodule Anansi do
   def instruction(:cursor, {:down, amount}) when is_integer(amount) and amount < 0 do
     escape abs(amount), "A"
   end
+  def instruction(:cursor, :right) do
+    escape "C"
+  end
   def instruction(:cursor, {:right, amount}) when is_integer(amount) and amount > 0 do
     escape amount, "C"
   end
   def instruction(:cursor, {:right, amount}) when is_integer(amount) and amount < 0 do
     escape abs(amount), "D"
+  end
+  def instruction(:cursor, :left) do
+    escape "D"
   end
   def instruction(:cursor, {:left, amount}) when is_integer(amount) and amount > 0 do
     escape amount, "D"

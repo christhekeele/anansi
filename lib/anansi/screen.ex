@@ -3,7 +3,7 @@ defmodule Anansi.Screen do
   ANSI escape codes that manipulate the terminal screen.
   """
 
-  import Anansi.Sequence, only: [compose: 1]
+  # import Anansi.Sequence, only: [compose: 1]
 
   @doc """
   Clears entire screen.

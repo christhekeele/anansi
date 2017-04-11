@@ -8,7 +8,7 @@ defmodule Anansi.Cursor do
   """
 
   import Anansi, only: [instruction: 2]
-  import Anansi.Sequence, only: [compose: 1]
+  # import Anansi.Sequence, only: [compose: 1]
 
   @doc """
   Moves cursor to top-left corner of screen (`{1, 1}`).
@@ -78,22 +78,12 @@ defmodule Anansi.Cursor do
   def move(direction)
 
   @directions |> Enum.each(fn direction ->
-    def move({unquote(direction), amount}), do: move unquote(direction), amount
+    def move(unquote(direction)), do: instruction :cursor, unquote(direction)
   end)
 
   @direction_aliases |> Keyword.values |> Enum.each(fn aliases ->
     Enum.each(aliases, fn alias ->
-      def move({unquote(alias), amount}), do: move unquote(alias), amount
-    end)
-  end)
-
-  @directions |> Enum.each(fn direction ->
-    def move(unquote(direction)), do: move unquote(direction), 1
-  end)
-
-  @direction_aliases |> Keyword.values |> Enum.each(fn aliases ->
-    Enum.each(aliases, fn alias ->
-      def move(unquote(alias)), do: move unquote(alias), 1
+      def move(unquote(alias)), do: move unquote(alias)
     end)
   end)
 
@@ -147,17 +137,25 @@ defmodule Anansi.Cursor do
 
   @directions |> Enum.each(fn direction ->
     @doc """
+    Moves cursor #{direction}.
+    """
+    def unquote(direction)(), do: move unquote(direction)
+    @doc """
     Moves cursor #{direction} by `amount`.
     """
-    def unquote(direction)(amount \\ 1), do: move unquote(direction), amount
+    def unquote(direction)(amount), do: move unquote(direction), amount
   end)
 
   @direction_aliases |> Enum.each(fn {direction, aliases} ->
     Enum.each(aliases, fn alias ->
       @doc """
+      Moves cursor #{direction}.
+      """
+      def unquote(alias)(), do: move unquote(direction)
+      @doc """
       Moves cursor #{direction} by `amount`.
       """
-      def unquote(alias)(amount \\ 1), do: move unquote(direction), amount
+      def unquote(alias)(amount), do: move unquote(direction), amount
     end)
   end)
 
