@@ -1,6 +1,6 @@
 defmodule Anansi.Text do
   @moduledoc """
-  ANSI escape sequences that format, color, and change the font of terminal text.
+  ANSI escape codes that format, color, and change the font of terminal text.
   """
 
   import Anansi, only: [instruction: 2]

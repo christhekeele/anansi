@@ -1,8 +1,8 @@
 defmodule Anansi.Cursor do
   @moduledoc """
-  ANSI escape sequences that manipulate the terminal cursor.
+  ANSI escape codes that manipulate the terminal cursor.
 
-  ANSI treats the cursor co-ordinates as positive integers of format `{row in 1..:infinity, col in 1..:infinity}`.
+  ANSI treats the cursor co-ordinates as positive integers of format `{row in 1..∞, col in 1..∞}`.
 
   It will ignore requests to move the cursor beyond the bounds of the terminal window.
   """

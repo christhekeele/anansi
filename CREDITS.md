@@ -1,5 +1,5 @@
-Contributors
-============
+Credits
+=======
 
 Thanks
 ------

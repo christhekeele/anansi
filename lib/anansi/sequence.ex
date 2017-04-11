@@ -11,7 +11,8 @@ defmodule Anansi.Sequence do
   #   {code, sequence} = Keyword.pop(sequence, :do, Keyword.get(block, :do, [""]))
   #   quote do: [
   #     [unquote(sequence) |> Anansi.Sequence.compose],
-  #     [unquote(code)]
+  #     [unquote(code)],
+  #     # revert somehow
   #   ]
   # end
 

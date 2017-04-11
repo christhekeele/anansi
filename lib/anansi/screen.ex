@@ -1,6 +1,6 @@
 defmodule Anansi.Screen do
   @moduledoc """
-  ANSI escape sequences that manipulate the terminal screen.
+  ANSI escape codes that manipulate the terminal screen.
   """
 
   import Anansi.Sequence, only: [compose: 1]

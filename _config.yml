@@ -1,0 +1,8 @@
+title: Anansi
+description: Command the terminal from a high-level with ANSI control codes.
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions

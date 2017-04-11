@@ -2,54 +2,78 @@ defmodule Anansi.Mixfile do
   use Mix.Project
 
   def project, do: [
+    name: "Anansi",
     app: :anansi,
 
-    elixir: "~> 1.0",
-    build_embedded:  Mix.env == :prod,
-    start_permanent: Mix.env == :prod,
-    deps: deps(),
-
     version: "0.0.1",
-    name: "Anansi",
-    source_url: package()[:Source],
-    homepage_url: package()[:Homepage],
+    elixir: "~> 1.0",
 
+    build_embedded: Mix.env == :prod,
+    start_permanent: Mix.env == :prod,
+
+    deps: deps(),
     docs: docs(),
-
     package: package(),
+
+    source_url:   package()[:links][:Source],
+    homepage_url: package()[:links][:Homepage],
+
+    test_coverage: coverage(),
+    dialyzer: dialyzer(),
   ]
 
   def application, do: [
-    applications: [],
+    extra_applications: [:logger],
+    mod: {Anansi, []},
   ]
 
-  defp deps, do: [
-    {:earmark, ">= 0.0.0", only: :dev},
-    {:ex_doc,  ">= 0.0.0", only: :dev},
+  defp deps, do: tools()
+
+  defp tools, do: [
+    {:dialyxir,    "~> 0.5",  only: :dev},
+    {:ex_doc,      "~> 0.15", only: :dev},
+    {:excoveralls, "~> 0.6",  only: :test},
+    {:credo,       "~> 0.6",  only: [:dev, :test]},
+    {:benchfella,  "~> 0.3",  only: [:dev, :test]},
+    {:inch_ex,     "~> 0.5",  only: [:dev, :test]},
   ]
 
   defp docs, do: [
-    # logo: "path/to/logo.png",
+    main: "Anansi",
+    # logo: "anansi.png",
     extras: [
       "README.md",
+      "CREDITS.md",
       "LICENSE.md",
-      "CONTRIBUTORS.md",
-    ],
+    ]
   ]
 
   defp package, do: [
     description: "Command the terminal from a high-level with ANSI control codes.",
     maintainers: [
-      "Chris Keele <dev@chriskeele.com>",
+      "Chris Keele <christhekeele+anansi@gmail.com>",
     ],
     licenses: [
       "MIT",
     ],
     links: %{
+      Homepage: "https://christhekeele.github.io/anansi",
       Source: "https://github.com/christhekeele/anansi",
-      Homepage: "http://christhekeele.github.io/anansi",
       Tests: "https://travis-ci.org/christhekeele/anansi",
+      Coverage: "https://coveralls.io/github/christhekeele/anansi",
     }
+  ]
+
+  defp coverage, do: [
+    tool: ExCoveralls,
+    coveralls: true,
+  ]
+
+  defp dialyzer, do: [
+    plt_add_apps: [
+      :mnesia,
+      # :ecto,
+    ]
   ]
 
 end
