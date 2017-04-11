@@ -19,14 +19,14 @@ defmodule Anansi.Sequence do
   @doc """
   Composes multiple ANSI escape instructions from a `sequence` of instructions.
   """
-  def compose(sequence) do
-    sequence |> build |> Enum.map(fn {m, f, a} -> apply(m, f, a) end)]
+  def compose(sequence) when is_list(sequence) do
+    sequence |> build |> Enum.map(fn {m, f, a} -> apply(m, f, a) end)
   end
 
   @doc """
   Converts an Anansi `sequence` of instructions into `{module, function, args}` tuples.
   """
-  def build(sequence) do
+  def build(sequence) when is_list(sequence) do
     sequence |> explode |> Enum.map(&instruction/1)
   end
 
